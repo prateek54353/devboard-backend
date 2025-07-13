@@ -1,0 +1,39 @@
+{
+  "name": "devboard-backend",
+  "version": "1.0.0",
+  "description": "A modular backend for an open-source developer productivity tool that serves both a Kotlin Android app and a Web frontend",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node dev.js",
+    "test": "jest --runInBand",
+    "lint": "eslint .",
+    "seed": "cross-env DB_SEED=true node -e \"require('./src/config/seed-data').seedDatabase()\""
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "axios": "^1.10.0",
+    "bcrypt": "^6.0.0",
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.0",
+    "express": "^5.1.0",
+    "helmet": "^8.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "morgan": "^1.10.0",
+    "pg": "^8.16.3",
+    "sequelize": "^6.37.7",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.1"
+  },
+  "devDependencies": {
+    "cross-env": "^7.0.3",
+    "eslint": "^8.56.0",
+    "jest": "^30.0.4",
+    "nodemon": "^3.1.10",
+    "sequelize-mock": "^0.10.2",
+    "supertest": "^7.1.3"
+  }
+}
