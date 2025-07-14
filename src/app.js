@@ -122,6 +122,14 @@ app.use('/api/v1/todos', todoRoutes);
 app.use('/api/v1/streaks', streakRoutes);
 app.use('/api/v1/challenges', challengeRoutes);
 
+// Diagnostic logging to print all registered routes
+const listEndpoints = require('express-list-endpoints');
+
+console.log('Registered routes:');
+listEndpoints(app).forEach((endpoint) => {
+  console.log(`${endpoint.methods.join(', ')} ${endpoint.path}`);
+});
+
 // 404 handler
 app.use('*', (req, res) => {
   res.status(404).json({
