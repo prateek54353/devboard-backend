@@ -8,7 +8,13 @@
     "dev": "node dev.js",
     "test": "jest --runInBand",
     "lint": "eslint .",
-    "seed": "cross-env DB_SEED=true node -e \"require('./src/config/seed-data').seedDatabase()\""
+    "seed": "cross-env DB_SEED=true node -e \"require('./src/config/seed-data').seedDatabase()\"",
+    "start:prod": "cross-env NODE_ENV=production node start-production.js",
+    "pm2:start": "pm2 start start-production.js --name devboard-api",
+    "pm2:stop": "pm2 stop devboard-api",
+    "pm2:restart": "pm2 restart devboard-api",
+    "pm2:logs": "pm2 logs devboard-api",
+    "pm2:monitor": "pm2 monit"
   },
   "keywords": [],
   "author": "",
@@ -17,9 +23,11 @@
   "dependencies": {
     "axios": "^1.10.0",
     "bcrypt": "^6.0.0",
+    "compression": "^1.8.0",
     "cors": "^2.8.5",
     "dotenv": "^17.2.0",
     "express": "^5.1.0",
+    "express-rate-limit": "^7.5.1",
     "helmet": "^8.1.0",
     "jsonwebtoken": "^9.0.2",
     "morgan": "^1.10.0",

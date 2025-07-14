@@ -6,6 +6,7 @@ yarn-error.log
 
 # Environment variables
 .env
+.env.production
 
 # Build directories
 dist/
@@ -30,3 +31,4 @@ Thumbs.db
 
 # android app
 devboard-android/
+devboard_flutter/

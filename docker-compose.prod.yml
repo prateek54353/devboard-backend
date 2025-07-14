@@ -1,0 +1,97 @@
+version: '3.8'
+
+services:
+  # Nginx reverse proxy for production
+  nginx:
+    image: nginx:alpine
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/conf.d:/etc/nginx/conf.d
+      - ./nginx/ssl:/etc/nginx/ssl
+      - ./nginx/logs:/var/log/nginx
+    depends_on:
+      - api
+    restart: unless-stopped
+    networks:
+      - devboard-network
+    healthcheck:
+      test: ["CMD", "nginx", "-t"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+
+  # API service
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    expose:
+      - "3000"
+    depends_on:
+      - db
+    env_file:
+      - .env.production
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+      - DB_HOST=db
+      - DB_PORT=5432
+    volumes:
+      - api_logs:/usr/src/app/logs
+    restart: unless-stopped
+    networks:
+      - devboard-network
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 512M
+        reservations:
+          cpus: '0.25'
+          memory: 256M
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:3000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+
+  # Database service
+  db:
+    image: postgres:14-alpine
+    expose:
+      - "5432"
+    env_file:
+      - .env.production
+    environment:
+      - POSTGRES_DB=devboard
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: unless-stopped
+    networks:
+      - devboard-network
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 512M
+        reservations:
+          cpus: '0.25'
+          memory: 256M
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+networks:
+  devboard-network:
+    driver: bridge
+
+volumes:
+  postgres_data:
+  api_logs:
