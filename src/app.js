@@ -3,8 +3,8 @@ const cors = require('cors');
 const helmet = require('helmet');
 const compression = require('compression');
 const rateLimit = require('express-rate-limit');
-// const swaggerUi = require('swagger-ui-express');
-// const swaggerSpecs = require('./config/swagger');
+const swaggerUi = require('swagger-ui-express');
+const swaggerSpecs = require('./config/swagger');
 const errorMiddleware = require('./middleware/error.middleware');
 const requestLogger = require('./middleware/request-logger.middleware');
 const logger = require('./utils/logger');
@@ -16,12 +16,12 @@ const productionConfig = require('./config/production');
 const isProduction = process.env.NODE_ENV === 'production';
 
 // Import routes
-// const authRoutes = require('./routes/auth.routes');
-// const githubRoutes = require('./routes/github.routes');
-// const stackoverflowRoutes = require('./routes/stackoverflow.routes');
-// const todoRoutes = require('./routes/todo.routes');
-// const streakRoutes = require('./routes/streak.routes');
-// const challengeRoutes = require('./routes/challenge.routes');
+const authRoutes = require('./routes/auth.routes');
+const githubRoutes = require('./routes/github.routes');
+const stackoverflowRoutes = require('./routes/stackoverflow.routes');
+const todoRoutes = require('./routes/todo.routes');
+const streakRoutes = require('./routes/streak.routes');
+const challengeRoutes = require('./routes/challenge.routes');
 
 // Initialize express app
 const app = express();
@@ -74,7 +74,7 @@ app.use(express.json()); // Parse JSON bodies
 app.use(express.urlencoded({ extended: true })); // Parse URL-encoded bodies
 
 // API Documentation
-// app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpecs));
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpecs));
 
 // Health check endpoint
 app.get('/health', (req, res) => {
@@ -115,12 +115,12 @@ app.get('/metrics', (req, res) => {
 });
 
 // API Routes
-// app.use('/api/v1/auth', authRoutes);
-// app.use('/api/v1/github', githubRoutes);
-// app.use('/api/v1/stackoverflow', stackoverflowRoutes);
-// app.use('/api/v1/todos', todoRoutes);
-// app.use('/api/v1/streaks', streakRoutes);
-// app.use('/api/v1/challenges', challengeRoutes);
+app.use('/api/v1/auth', authRoutes);
+app.use('/api/v1/github', githubRoutes);
+app.use('/api/v1/stackoverflow', stackoverflowRoutes);
+app.use('/api/v1/todos', todoRoutes);
+app.use('/api/v1/streaks', streakRoutes);
+app.use('/api/v1/challenges', challengeRoutes);
 
 // 404 handler
 app.use('*', (req, res) => {
