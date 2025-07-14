@@ -85,6 +85,43 @@ router.get('/me', protect, authController.getMe);
 
 /**
  * @swagger
+ * /auth/verify-email:
+ *   get:
+ *     summary: Verify user email
+ *     tags: [Authentication]
+ *     parameters:
+ *       - in: query
+ *         name: token
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Email verification token
+ *     responses:
+ *       200:
+ *         description: Email verified successfully
+ *       400:
+ *         description: Invalid or expired token
+ */
+router.get('/verify-email', authController.verifyEmail);
+
+/**
+ * @swagger
+ * /auth/logout:
+ *   post:
+ *     summary: Logout user
+ *     tags: [Authentication]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Logout successful
+ *       401:
+ *         description: Not authenticated
+ */
+router.post('/logout', protect, authController.logout);
+
+/**
+ * @swagger
  * /auth/update-profile:
  *   patch:
  *     summary: Update user profile
